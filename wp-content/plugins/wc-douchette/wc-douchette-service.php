@@ -6,20 +6,20 @@ class WcdouchetteService {
    */
   protected static $_instance = null;
 
-  protected static $_isDev = null;
-  protected static $_consumer_woo_key = null;
-  protected static $_consumer_woo_secret = null;
-  protected static $_pmp_url = null;
-  protected static $_pmp_user = null;
-  protected static $_pmp_pass = null;
+  public static $_isDev = false;
+  public static $_consumer_woo_key = null;
+  public static $_consumer_woo_secret = null;
+  public static $_pmp_url = null;
+  public static $_pmp_user = null;
+  public static $_pmp_pass = null;
 
   /**
    * launch init()
    * @throws Exception
    */
    protected function __construct() {
-    $this->init();
-  }
+     $this->init();
+   }
 
   /**
    * singleton the instance
@@ -34,11 +34,12 @@ class WcdouchetteService {
    */
    public function wc_douchette_get_order($order_id) {
      $current_order = wp_remote_get(get_site_url().'/wp-json/wc/v3/orders/'.$order_id, array(
-       'sslverify' => !self::$_isDev, // ONLY IN DEV
+       'sslverify' => !$this->_isDev, // ONLY IN DEV
        'headers' => array(
-         'Authorization' => 'Basic ' . base64_encode( self::$_consumer_woo_key . ':' . self::$_consumer_woo_secret )
+         'Authorization' => 'Basic ' . base64_encode( $this->_consumer_woo_key . ':' . $this->_consumer_woo_secret )
        )
      ));
+     // var_dump($current_order);
      return wp_remote_retrieve_body($current_order);
    }
 
@@ -50,10 +51,10 @@ class WcdouchetteService {
        'method' => 'PUT',
        'headers' => array(
          'Content-Type' => 'application/json',
-         'Authorization' => 'Basic ' . base64_encode( self::$_consumer_woo_key . ':' . self::$_consumer_woo_secret )
+         'Authorization' => 'Basic ' . base64_encode( $this->_consumer_woo_key . ':' . $this->_consumer_woo_secret )
        ),
        'body' => json_encode(array("status" => "on-hold")),
-       'sslverify' => !self::$_isDev, // ONLY IN DEV
+       'sslverify' => !$this->_isDev, // ONLY IN DEV
      ));
      return wp_remote_retrieve_body($update);
    }
@@ -62,11 +63,11 @@ class WcdouchetteService {
     * create a mission in pmp
     */
    private function wc_douchette_create_mission($MissionName, $Reference, $Label, $Quantity) {
-     $update = wp_remote_request(self::$_pmp_url, array(
+     $update = wp_remote_request($this->_pmp_url, array(
        'method' => 'POST',
        'headers' => array(
          'Content-Type' => 'application/json',
-         'Authorization' => 'Basic ' . base64_encode( self::$_pmp_user . ':' . self::$_pmp_pass )
+         'Authorization' => 'Basic ' . base64_encode( $this->_pmp_user . ':' . $this->_pmp_pass )
        ),
        'body' => json_encode(array(
          "MissionName" => $MissionName,
@@ -82,7 +83,7 @@ class WcdouchetteService {
    * loop on woocommerce line and send to pmp
    */
   public function wc_douchette_send_product($order) {
-    $mission_url = self::$_pmp_url.'MissionAddDetail';
+    $mission_url = $this->_pmp_url.'MissionAddDetail';
     $lines = $order->line_items;
     for ($i=0; $i<count($lines); $i++) {
       $product=$lines[$i];

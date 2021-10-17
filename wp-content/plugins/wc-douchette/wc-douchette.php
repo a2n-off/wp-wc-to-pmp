@@ -101,7 +101,7 @@ if (!class_exists('Wcdouchette')) {
       }
 			if (!class_exists('WcdouchetteService', false)) {
         include_once plugin_dir_path( __FILE__ ) . 'wc-douchette-service.php';
-        $wcdouchetteservice = WcdouchetteService::instance();
+				$GLOBALS['wcdouchetteservice'] = wcdouchetteservice::instance();
       }
     }
 

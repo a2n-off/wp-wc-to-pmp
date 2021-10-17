@@ -42,10 +42,11 @@ class WcdouchetteApi {
    * core function for the call to pmp
    */
   public function wc_douchette_send(WP_REST_Request $request) {
+    global $wcdouchetteservice;
     $order_id = $request->get_param('id');
-    $order = wcdouchetteservice::wc_douchette_get_order($order_id); // get current order
-    wcdouchetteservice::wc_douchette_send_product($order); // send to pmp
-    $update_info = wcdouchetteservice::wc_douchette_update_order($order_id); // update if success
+    $order = $wcdouchetteservice->wc_douchette_get_order($order_id); // get current order
+    $wcdouchetteservice->wc_douchette_send_product($order); // send to pmp
+    $update_info = $wcdouchetteservice->wc_douchette_update_order($order_id); // update if success
     if (json_decode($update_info)->data->status === 401) return new WP_REST_Response('check your woocommerce key', 401);
     return new WP_REST_Response( ['updated', $order_id], 200);
   }
