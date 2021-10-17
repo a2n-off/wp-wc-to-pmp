@@ -66,7 +66,7 @@ class WcdouchetteService {
        'method' => 'POST',
        'headers' => array(
          'Content-Type' => 'application/json',
-         'Authorization' => 'Basic ' . base64_encode( self::$_consumer_woo_key . ':' . self::$_consumer_woo_secret )
+         'Authorization' => 'Basic ' . base64_encode( self::$_pmp_user . ':' . self::$_pmp_pass )
        ),
        'body' => json_encode(array(
          "MissionName" => $MissionName,
