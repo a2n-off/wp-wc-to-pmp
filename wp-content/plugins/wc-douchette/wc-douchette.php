@@ -99,9 +99,9 @@ if (!class_exists('Wcdouchette')) {
         include_once plugin_dir_path( __FILE__ ) . 'wc-douchette-api.php';
         $wcdouchetteapi = WcdouchetteApi::instance();
       }
-			if (!class_exists('WcdouchettePMP', false)) {
-        include_once plugin_dir_path( __FILE__ ) . 'wc-douchette-pmp.php';
-        $wcdouchettepmp = WcdouchettePMP::instance();
+			if (!class_exists('WcdouchetteService', false)) {
+        include_once plugin_dir_path( __FILE__ ) . 'wc-douchette-service.php';
+        $wcdouchetteservice = WcdouchetteService::instance();
       }
     }
 

@@ -7,7 +7,6 @@ class WcdouchetteApi {
   protected static $_instance = null;
 
   protected static $_user = null;
-  protected static $_isDev = null;
 
   /**
    * launch init()
@@ -44,29 +43,9 @@ class WcdouchetteApi {
    */
   public function wc_douchette_send(WP_REST_Request $request) {
     $order_id = $request->get_param('id');
-    $consumer_key=esc_attr(get_option('wcdouchette_option_pmp_ck'));
-    $consumer_secret=esc_attr(get_option('wcdouchette_option_pmp_cs'));
-    $pmp_url=esc_attr(get_option('wcdouchette_option_pmp_url'));
-    // send to pmp
-    $current_order = wp_remote_get(get_site_url().'/wp-json/wc/v3/orders/'.$order_id, array(
-      'sslverify' => !$this->_isDev, // ONLY IN DEV
-      'headers' => array(
-        'Authorization' => 'Basic ' . base64_encode( $consumer_key . ':' . $consumer_secret )
-      )
-    ));
-    $order = wp_remote_retrieve_body($current_order);
-    wcdouchettepmp::wc_douchette_send_product($order);
-    // update if success
-    $update = wp_remote_request(get_site_url().'/wp-json/wc/v3/orders/'.$order_id, array(
-      'method' => 'PUT',
-      'headers' => array(
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Basic ' . base64_encode( $consumer_key . ':' . $consumer_secret )
-      ),
-      'body' => json_encode(array("status" => "on-hold")),
-      'sslverify' => !$this->_isDev, // ONLY IN DEV
-    ));
-    $update_info = wp_remote_retrieve_body($update);
+    $order = wcdouchetteservice::wc_douchette_get_order($order_id); // get current order
+    wcdouchetteservice::wc_douchette_send_product($order); // send to pmp
+    $update_info = wcdouchetteservice::wc_douchette_update_order($order_id); // update if success
     if (json_decode($update_info)->data->status === 401) return new WP_REST_Response('check your woocommerce key', 401);
     return new WP_REST_Response( ['updated', $order_id], 200);
   }
@@ -87,8 +66,6 @@ class WcdouchetteApi {
    * load custom api endpoint
    */
   private function init() {
-    // check env
-    if (get_site_url() === 'https://wp-pp.test') $this->_isDev = true;
     // populate user info
     global $current_user;
     get_currentuserinfo();
