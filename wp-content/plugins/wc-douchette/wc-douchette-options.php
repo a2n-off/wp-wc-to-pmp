@@ -56,7 +56,8 @@ class WcdouchetteOptions {
 
                   <table>
                       <tr>
-                          <h3>The woocommerce key need read/write right</h3>
+                          <tr><h4>Woocommerce informations</h4></tr>
+                          <tr><code>The woocommerce key need read/write right in administrator account</code></tr>
                           <tr>
                             <td><label for='wcdouchette_option_woo_ck'>Woocommerce ck key</label></td>
                             <td>
@@ -73,6 +74,7 @@ class WcdouchetteOptions {
                                 />
                             </td>
                           </tr>
+                          <tr><td><h4>Pickeos Mission Prepa informations</h4></td></tr>
                           <tr>
                             <td><label for='wcdouchette_option_pmp_url'>PMP URL (with the trailling slash)</label></td>
                             <td>
