@@ -46,8 +46,16 @@ class WcdouchetteApi {
     $order_id = $request->get_param('id');
     $consumer_key=esc_attr(get_option('wcdouchette_option_pmp_ck'));
     $consumer_secret=esc_attr(get_option('wcdouchette_option_pmp_cs'));
+    $pmp_url=esc_attr(get_option('wcdouchette_option_pmp_url'));
     // send to pmp
-    // todo
+    $current_order = wp_remote_get(get_site_url().'/wp-json/wc/v3/orders/'.$order_id, array(
+      'sslverify' => !$this->_isDev, // ONLY IN DEV
+      'headers' => array(
+        'Authorization' => 'Basic ' . base64_encode( $consumer_key . ':' . $consumer_secret )
+      )
+    ));
+    $order = wp_remote_retrieve_body($current_order);
+    wcdouchettepmp::wc_douchette_send_product($order);
     // update if success
     $update = wp_remote_request(get_site_url().'/wp-json/wc/v3/orders/'.$order_id, array(
       'method' => 'PUT',
