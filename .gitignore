@@ -1,3 +1,9 @@
+# Ignore everything
 *
-wp-content/plugins/*
-!wp-content/plugins/wc-douchette/*
+
+# Don't ignore directories, so we can recurse into them
+!*/
+
+# Don't ignore .gitignore and *.foo files
+!.gitignore
+!*/wc-douchette
