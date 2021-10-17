@@ -6,4 +6,7 @@
 
 # Don't ignore .gitignore and *.foo files
 !.gitignore
-!*/wc-douchette
+!wp-content/plugins/wc-douchette/*
+
+# ignore sub gitignore
+**/.gitignore
