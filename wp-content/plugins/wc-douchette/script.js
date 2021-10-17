@@ -1,10 +1,26 @@
-console.log('js loaded');
+console.log('wcdouchette js loaded');
 
-const btns = document.getElementsByClassName('pmp-sender');
+// get all the pmp buttons
+const elems = document.getElementsByClassName("pmp-sender");
 
-for (var i=0; i<btns.length; i++) {
- btns[i].addEventListener('click', () => {
-   const order_id = btns[i].dataset.pmp;
-   console.log(order_id);
- })
+// init xhr function
+function sendToPmp(elem) {
+  const host = window.location.origin;
+  const id = elem.dataset.pmp;
+  const url = host + '/wp-json/wcdouchette/v1/send/' + id;
+  console.log(url);
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    // reload the page after the update
+    // give the possibilty to update the data into the table
+    if (xhr.readyState == XMLHttpRequest.DONE) window.location.reload(false);
+  }
+  xhr.open("POST", url, true);
+  xhr.send();
+}
+
+// add event on each btn
+for (let i=0; i<elems.length; i++) {
+  console.log(elems[i]);
+  elems[i].addEventListener('click', () => sendToPmp(elems[i]));
 }
