@@ -6,6 +6,8 @@ class WcdouchetteApi {
    */
   protected static $_instance = null;
 
+  protected static $_current_user = null;
+
   /**
    * launch init()
    * @throws Exception
@@ -30,20 +32,29 @@ class WcdouchetteApi {
   }
 
   /**
-   *
+   * check if the user have the authorization
    */
    function wc_douchette_authguard() {
-     // return current_user_can('administrator');
-     return true;
+     return user_can($this->user, 'administrator');
    }
 
   /**
    * todo function
    */
   public function wc_douchette_send(WP_REST_Request $request) {
-    $parameters = $request->get_param('id');
-    $user = wp_get_current_user();
-    return new WP_REST_Response( ['pong', $parameters, $user], 200);
+    $order_id = $request->get_param('id');
+    $consumer_key=esc_attr(get_option('wcdouchette_option_pmp_ck'));
+    $consumer_secret=esc_attr(get_option('wcdouchette_option_pmp_cs'));
+    $args = array(
+      'sslverify' => false,
+      'headers' => array(
+        'Authorization' => 'Basic ' . base64_encode( $consumer_key . ':' . $consumer_secret )
+      )
+    );
+    $response = wp_remote_get(get_site_url().'/wp-json/wc/v3/orders/'.$order_id, $args);
+    $body = wp_remote_retrieve_body($response);
+    // return new WP_REST_Response( ['pong', $order_id, json_decode($body), $this->user], 200);
+    wp_redirect('https://wp-pp.test/wp-admin/edit.php?post_type=shop_order');
   }
 
   /**
@@ -62,6 +73,11 @@ class WcdouchetteApi {
    * load custom api endpoint
    */
   private function init() {
+    // populate user info
+    global $current_user;
+    get_currentuserinfo();
+    $this->user = $current_user;
+    // add api routes
     add_action('rest_api_init', array($this, 'wcdouchette_register_routes'));
     add_filter('rest_authentication_errors', array($this, 'wcdouchette_register_routes'));
   }

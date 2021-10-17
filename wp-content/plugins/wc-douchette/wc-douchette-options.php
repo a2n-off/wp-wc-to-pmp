@@ -27,11 +27,11 @@ class WcdouchetteOptions {
    */
   public function wcdouchette_register_settings() {
     add_option( 'wcdouchette_option_pmp_url', 'http://xx.gtlsrv.com:1337', '', 'yes' );
-    add_option( 'wcdouchette_option_pmp_user', 'user', '', 'yes' );
-    add_option( 'wcdouchette_option_pmp_password', '1234', '', 'yes' );
+    add_option( 'wcdouchette_option_pmp_ck', 'ck_1234', '', 'yes' );
+    add_option( 'wcdouchette_option_pmp_cs', 'cs_1234', '', 'yes' );
     register_setting('wcdouchette_options_group', 'wcdouchette_option_pmp_url');
-    register_setting('wcdouchette_options_group', 'wcdouchette_option_pmp_user');
-    register_setting('wcdouchette_options_group', 'wcdouchette_option_pmp_password');
+    register_setting('wcdouchette_options_group', 'wcdouchette_option_pmp_ck');
+    register_setting('wcdouchette_options_group', 'wcdouchette_option_pmp_cs');
   }
 
   /**
@@ -53,8 +53,8 @@ class WcdouchetteOptions {
                   <table>
                       <tr>
                           <td><label for='wcdouchette_option_pmp_url'>PMP URL</label></td>
-                          <td><label for='wcdouchette_option_pmp_user'>PMP USER</label></td>
-                          <td><label for='wcdouchette_option_pmp_password'>PMP PASSWORD</label></td>
+                          <td><label for='wcdouchette_option_pmp_ck'>Woocommerce ck key</label></td>
+                          <td><label for='wcdouchette_option_pmp_cs'>Woocommerce cs key</label></td>
                       </tr>
                       <tr>
                           <td>
@@ -63,13 +63,13 @@ class WcdouchetteOptions {
                               />
                           </td>
                           <td>
-                              <input type='text' name='wcdouchette_option_pmp_user'
-                                     value="<?php echo esc_attr( get_option('wcdouchette_option_pmp_user'));?>"
+                              <input type='text' name='wcdouchette_option_pmp_ck'
+                                     value="<?php echo esc_attr( get_option('wcdouchette_option_pmp_ck'));?>"
                               />
                           </td>
                           <td>
-                              <input type='password' name='wcdouchette_option_pmp_password'
-                                     value="<?php echo esc_attr( get_option('wcdouchette_option_pmp_password'));?>"
+                              <input type='password' name='wcdouchette_option_pmp_cs'
+                                     value="<?php echo esc_attr( get_option('wcdouchette_option_pmp_cs'));?>"
                               />
                           </td>
                       </tr>
