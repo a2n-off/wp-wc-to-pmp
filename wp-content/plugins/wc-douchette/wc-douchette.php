@@ -101,20 +101,12 @@ if (!class_exists('Wcdouchette')) {
       }
     }
 
-    /**
-     * include script file
-     * @throws Exception
-     */
-    public function wcdouchette_includes_js() {
-      wp_enqueue_script('wcdouchette-script-js', plugins_url( 'script.js', __FILE__ ));
-    }
-
 		/**
 		 * init class
 		 * add option submenu into the woocommerce primary menu
 		 */
 		private function init() {
-      add_action('wp_enqueue_scripts', array($this, 'wcdouchette_includes_js'));
+      //
 		}
 	}
 }
